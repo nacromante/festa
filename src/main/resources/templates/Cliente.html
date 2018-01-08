@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width"/>
+	</head>
+	
+	<title> Cadastr de convidado</title>
+	
+	<link th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" rel="stylesheet"/>
+	<link th:href="@{/webjars/bootstrap/css/bootstrap-theme.min.css}" rel="stylesheet"/>
+	<link th:href="@{/css/festa.css}" rel="stylesheet"/>
+	<script th:src="@{/bibliotecas/jquery-3.2.1.min.js}" type="text/javascript"></script>
+	<script th:src="@{/bibliotecas/jquery.maskedinput.js}" type="text/javascript"></script>
+	<script th:src="@{/js/util.js}" type="text/javascript"></script>
+	
+	<body>
+		
+		<form id="form-cliente" method="post" th:object="${cliente}" action="/cliente/cadastro/proximo">
+			<div class="progtrckr-table" style="width:80%;margin-left:auto;margin-right:auto;" > 
+			  <div th:each="step : ${steps}" 
+			  	th:class="${step.status.getNome()} == 'ausente' ? 'progtrckr-todo' : (${step.status.getNome()} == 'incompleto' ? 'progtrckr-doing': 'progtrckr-done')">
+			  		<span th:text="${step.desc}"></span>
+			  </div>
+			</div>
+			<div id="painel-step1" class="panel panel-default" th:class="${pStep} == 1? 'visivel' : 'invisivel'" 
+				style="width: 35%; margin-left: auto; margin-right:auto;margin-top:5%;">
+				<div class="alert alert-success" role="alert" th:text="${msg}" th:if="${not #strings.isEmpty(msg)}">
+				</div>
+				<div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}">
+					<div th:each="detalhe : ${#fields.detailedErrors()}">
+						<span th:text="${detalhe.message}"></span>
+					</div>
+				</div>
+				<div class="panel-heading">
+					<div class="clearfix">
+						<h1 class="panel-title titulo-painel">Dados Pessoais</h1>
+						<a class="panel-title link-painel" th:href="@{/buffet}" title="Voltar">
+							<span class="glyphicon glyphicon-hand-left" aria-hidden="true"></span>
+						</a>
+					</div>
+				</div>
+				<div class="panel-body">
+					<div class="form-group">
+						<input type="hidden" class="form-control" placeholder="ID" th:field="*{id}"/>
+					</div>
+					<div class="form-group" th:classappend="${#fields.hasErrors('nome')} ? 'has-error'">
+						<label class="control-label">Nome</label>
+						<input id="iptNome" type="text" class="form-control" placeholder="Nome" th:field="*{nome}"/>
+					</div>
+					<div class="form-group" th:classappend="${#fields.hasErrors('cpf')} ? 'has-error'">
+						<label class="control-label">CPF</label>
+						<input type="text" class="form-control input-cpf" placeholder="CPF" th:field="*{cpf}"/>
+					</div>
+					<div class="form-group" th:classappend="${#fields.hasErrors('telefone')} ? 'has-error'">
+						<label class="control-label">Telefone</label>
+						<input type="text" class="form-control input-telefone" placeholder="Telefone" th:field="*{telefone}"/>
+					</div>
+					<div class="form-group" th:classappend="${#fields.hasErrors('celular')} ? 'has-error'">
+						<label class="control-label">Celular</label>
+						<input type="text" class="form-control input-telefone" placeholder="Celular" th:field="*{celular}"/>
+					</div>
+					<div class="form-group" th:classappend="${#fields.hasErrors('sexo')} ? 'has-error'">	
+						<label class="control-label labelCad">Sexo</label>
+						<label th:each="sexo : ${sexos}" class="radio-inline">
+							<input  type="radio" th:value="${sexo}" th:field="*{sexo}"/>
+							<span th:text="${sexo.descricao}"></span>
+						</label>
+					</div>
+					<div class="form-group">
+						<button id="btn-proximo-step1" type="submit" class="btn btn-primary" >Próximo</button>
+					</div>
+				</div>
+			</div>
+			
+			<div id="painel-step2" class="panel panel-default" th:class="${pStep} == 2? 'visivel' : 'invisivel'" 
+				style="width: 35%; margin-left: auto; margin-right:auto;margin-top:5%;" th:object="${endereco}">
+				<div class="alert alert-success" role="alert" th:text="${msg}" th:if="${not #strings.isEmpty(msg)}">
+				</div>
+				<div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}">
+					<div th:each="detalhe : ${#fields.detailedErrors()}">
+						<span th:text="${detalhe.message}"></span>
+					</div>
+				</div>
+				<div class="panel-heading">
+					<div class="clearfix">
+						<h1 class="panel-title titulo-painel">Endereço</h1>
+						<a class="panel-title link-painel" th:href="@{/buffet}" title="Voltar">
+							<span class="glyphicon glyphicon-hand-left" aria-hidden="true"></span>
+						</a>
+					</div>
+				</div>
+				<div class="panel-body">
+					<div class="form-group">
+						<input type="hidden" class="form-control" placeholder="ID" th:field="*{id}"/>
+					</div>
+					<div class="form-group" th:classappend="${#fields.hasErrors('cep')} ? 'has-error'">
+						<label class="control-label">CEP</label>
+						<input id="ipt-cep" type="text" class="form-control" placeholder="CEP" th:field="*{cep}"/>
+					</div>
+					<div class="row">
+						<div class="form-group col-md-9" th:classappend="${#fields.hasErrors('rua')} ? 'has-error'">
+							<label class="control-label">Rua/Av.</label>
+							<input id="ipt-rua" type="text" class="form-control" placeholder="Rua" th:field="*{rua}"/>
+						</div>
+						<div class="form-group col-md-3" th:classappend="${#fields.hasErrors('numero')} ? 'has-error'">
+							<label class="control-label">Número</label>
+							<input id="ipt-numero" type="text" class="form-control" placeholder="Número" th:field="*{numero}"/>
+						</div>
+					</div>
+					<div class="form-group" th:classappend="${#fields.hasErrors('bairro')} ? 'has-error'">
+						<label class="control-label">Bairro</label>
+						<input id="ipt-bairro" type="text" class="form-control" placeholder="Bairro" th:field="*{bairro}"/>
+					</div>
+					<div class="form-group" th:classappend="${#fields.hasErrors('complemento')} ? 'has-error'">
+						<label class="control-label">Complemento</label>
+						<input id="ipt-complemento" type="text" class="form-control" placeholder="Complemento" th:field="*{complemento}"/>
+					</div>
+					<div class="row">
+						<div class="form-group col-md-6" th:classappend="${#fields.hasErrors('cidade')} ? 'has-error'">
+							<label class="control-label">Cidade</label>
+							<input id="ipt-cidade" type="text" class="form-control" readonly placeholder="Cidade" th:field="*{cidade}"/>
+						</div>
+						<div class="form-group col-md-6" th:classappend="${#fields.hasErrors('estado')} ? 'has-error'">
+							<label class="control-label">Estado</label>
+							<input id="ipt-estado" type="text" class="form-control" readonly placeholder="Estado" th:field="*{estado}"/>
+						</div>
+					</div>
+					<div class="form-group">
+						<button id="btn-anterior-step2" type="submit" class="btn btn-primary anterior" >Anterior</button>
+						<button id="btn-proximo-step2" type="submit" class="btn btn-primary" >Próximo</button>
+					</div>
+				</div>
+			</div>
+			
+			<div id="painel-step3" class="panel panel-default" th:class="${pStep} == 3? 'visivel' : 'invisivel'" 
+				style="width: 35%; margin-left: auto; margin-right:auto;margin-top:5%;" th:object="${usuario}">
+				<div class="alert alert-success" role="alert" th:text="${msg}" th:if="${not #strings.isEmpty(msg)}">
+				</div>
+				<div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}">
+					<div th:each="detalhe : ${#fields.detailedErrors()}">
+						<span th:text="${detalhe.message}"></span>
+					</div>
+				</div>
+				<div class="panel-heading">
+					<div class="clearfix">
+						<h1 class="panel-title titulo-painel">Dados de Acesso</h1>
+						<a class="panel-title link-painel" th:href="@{/buffet}" title="Voltar">
+							<span class="glyphicon glyphicon-hand-left" aria-hidden="true"></span>
+						</a>
+					</div>
+				</div>
+				<div class="panel-body">
+					<div class="form-group">
+						<input type="hidden" class="form-control" placeholder="ID" th:field="*{id}"/>
+					</div>
+					<div class="form-group">
+						<input type="text" class="form-control"  th:field="*{login}"/>
+					</div>
+					<div class="form-group">
+						<input type="text" class="form-control" placeholder="Senha" th:field="*{senha}"/>
+					</div>
+					<div class="form-group">
+						<input type="text" class="form-control" placeholder="ID" th:value="${senhaRepita}"/>
+					</div>
+					
+					<div class="form-group">
+						<button id="btn-anterior-step3" type="submit" class="btn btn-primary anterior" >Anterior</button>
+						<button id="btnSalvar" type="submit" class="btn btn-primary" >Salvar</button>
+					</div>
+				</div>
+			</div>
+		</form>
+		
+	</body>
+</html>
