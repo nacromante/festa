@@ -53,13 +53,22 @@ xmlns:th="http://www.thymeleaf.org">
 						<label class="control-label">CPF</label>
 						<input type="text" class="form-control input-cpf" placeholder="CPF" th:field="*{cpf}"/>
 					</div>
-					<div class="form-group" th:classappend="${#fields.hasErrors('telefone')} ? 'has-error'">
-						<label class="control-label">Telefone</label>
-						<input type="text" class="form-control input-telefone" placeholder="Telefone" th:field="*{telefone}"/>
+					<div class="form-group" th:classappend="${#fields.hasErrors('email')} ? 'has-error'">
+						<label class="control-label">E-mail</label>
+						<div class="input-group">
+							<span class="input-group-addon">@</span>
+							<input type="text" class="form-control" placeholder="E-mail" th:field="*{email}"/>
+						</div>
 					</div>
-					<div class="form-group" th:classappend="${#fields.hasErrors('celular')} ? 'has-error'">
-						<label class="control-label">Celular</label>
-						<input type="text" class="form-control input-telefone" placeholder="Celular" th:field="*{celular}"/>
+					<div class="row">
+						<div class="form-group col-md-6" th:classappend="${#fields.hasErrors('telefone')} ? 'has-error'">
+							<label class="control-label">Telefone</label>
+							<input type="text" class="form-control input-telefone" placeholder="Telefone" th:field="*{telefone}"/>
+						</div>
+						<div class="form-group col-md-6" th:classappend="${#fields.hasErrors('celular')} ? 'has-error'">
+							<label class="control-label">Celular</label>
+							<input type="text" class="form-control input-telefone" placeholder="Celular" th:field="*{celular}"/>
+						</div>
 					</div>
 					<div class="form-group" th:classappend="${#fields.hasErrors('sexo')} ? 'has-error'">	
 						<label class="control-label labelCad">Sexo</label>
@@ -156,13 +165,16 @@ xmlns:th="http://www.thymeleaf.org">
 						<input type="hidden" class="form-control" placeholder="ID" th:field="*{id}"/>
 					</div>
 					<div class="form-group">
-						<input type="text" class="form-control"  th:field="*{login}"/>
+						<label class="control-label">Login</label>
+						<input type="text" class="form-control" readonly th:field="*{login}"/>
 					</div>
-					<div class="form-group">
-						<input type="text" class="form-control" placeholder="Senha" th:field="*{senha}"/>
+					<div class="form-group" th:classappend="${#fields.hasErrors('senha')} ? 'has-error'">
+						<label class="control-label">Senha</label>
+						<input type="password" class="form-control" placeholder="Senha" th:field="*{senha}"/>
 					</div>
-					<div class="form-group">
-						<input type="text" class="form-control" placeholder="ID" th:value="${senhaRepita}"/>
+					<div class="form-group" th:classappend="${#fields.hasErrors('senhaRepita')} ? 'has-error'">
+						<label class="control-label">Repita a senha</label>
+						<input type="password" class="form-control" placeholder="Repita" th:field="*{senhaRepita}"/>
 					</div>
 					
 					<div class="form-group">

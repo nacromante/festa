@@ -14,12 +14,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.Validator;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.thymeleaf.spring4.expression.Fields;
 
 import com.algaworks.festa.model.Cliente;
 import com.algaworks.festa.model.Endereco;
@@ -41,8 +44,6 @@ public class ClienteController {
 	private int pStep = 1;
 	private List<Step> steps;
 
-	private String senhaRepita;
-	
 	public ClienteController() {
 		steps = new ArrayList<Step>();
 		steps.add(new Step(1,"Dados Pessoais",StatusStep.INCOMPLETO));
@@ -63,6 +64,13 @@ public class ClienteController {
 //		return new ModelAndView("redirect:/cadastro");
 //
 //	}
+	
+	@ModelAttribute
+    public void addAttributes(Model model) {
+        model.addAttribute("senhaRepita", "");
+        System.out.println("entrou model atribute");
+    }
+	
 	@GetMapping("/cadastro")
 	public ModelAndView cadastro(Cliente cliente, Endereco endereco, Usuario usuario) {
 		ModelAndView modelAndView = new ModelAndView("Cliente");
@@ -74,7 +82,7 @@ public class ClienteController {
 		modelAndView.addObject("steps", steps);
 		modelAndView.addObject("pStep", pStep);
 //		modelAndView.addObject("senhaRepita", senhaRepita);
-		modelAndView.getModel().put("senhaRepita", senhaRepita);
+//		modelAndView.getModel().put("senhaRepita", senhaRepita);
 		System.out.println("pstep: "+pStep);
 		return modelAndView;
 	}
@@ -82,21 +90,23 @@ public class ClienteController {
 	@PostMapping("/cadastro/proximo")
 	public ModelAndView proximo(@Valid Cliente cliente, BindingResult resultCli, 
 			Endereco endereco, BindingResult resultEnd,
-			Usuario usuario, BindingResult resultUsu,
-			Model model) {
+			Usuario usuario, BindingResult resultUsu) {
 		
 		boolean temErro = false;
 		BindingResult result = resultCli;
 		Object obj = endereco;
 		if(!resultCli.hasErrors()) {
+			usuario.setLogin(cliente.getEmail());
 			if(pStep == 2) {
 				obj = endereco;
 				result = resultEnd;
 			}
 			if(pStep == 3) {
 				obj = usuario;
-				if(!model.asMap().get("senhaRepita").equals(usuario.getSenha()))
-					resultUsu.reject("senha", "As senhas não conferem");
+				if(!usuario.senhaConfere()) {
+					resultUsu.rejectValue("senha","error.usuario", "As senhas não conferem");
+					resultUsu.rejectValue("senhaRepita","error.usuario", "");
+				}
 				result = resultUsu;
 			}
 			if(pStep > 1 && pStep < 4)

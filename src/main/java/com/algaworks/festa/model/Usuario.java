@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.validator.constraints.NotBlank;
@@ -30,6 +31,14 @@ public class Usuario implements Serializable{
 	
 	@Column(name="autorizacao",nullable=false)
 	private String autorizacao;
+	
+	@Transient
+	private String senhaRepita;
+	
+	
+	public boolean senhaConfere() {
+		return this.senha.equals(senhaRepita);
+	}
 
 	public Long getId() {
 		return id;
@@ -61,6 +70,14 @@ public class Usuario implements Serializable{
 
 	public void setAutorizacao(String autorizacao) {
 		this.autorizacao = autorizacao;
+	}
+
+	public String getSenhaRepita() {
+		return senhaRepita;
+	}
+
+	public void setSenhaRepita(String senhaRepita) {
+		this.senhaRepita = senhaRepita;
 	}
 	
 	

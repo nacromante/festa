@@ -15,5 +15,5 @@ public class InMemorySecurityConfig {
 		.and()
 		.withUser("Maria").password("12").roles("USER");
 	}
-
+	
 }
