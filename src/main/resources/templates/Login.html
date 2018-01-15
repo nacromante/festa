@@ -64,8 +64,11 @@
 						</div>
 					</div>
 				</div>
-				<div th:href="@{/cliente/cadastro}" class="aw-simple-panel__footer">
-					Novo por aqui? <a href="#">Cadastre-se</a>.
+				<div  class="aw-simple-panel__footer">
+					Novo por aqui? <a th:href="@{/cliente/cadastro}">Cadastre-se</a>.
+					<div style="margin-top: 1%;">
+						Esqueceu a senha? <a th:href="@{/buffet/recupera}">Recupere aqui</a>.
+					</div>
 				</div>
 			</div>
 		</form>
