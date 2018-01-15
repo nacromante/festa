@@ -2,7 +2,8 @@ $(document).ready( function() {
 	 $(".input-cpf").mask("999.999.999-99",{placeholder:"###.###.###-##"});
 	 $(".input-data").mask("99/99/9999",{placeholder:"dd/mm/yyyy"});
 	 $("#ipt-cep").mask("99999-999",{placeholder:"#####-###"});
-	 
+	
+	
 	 
 	setTimeout(function() {
 		$('.alert-success').fadeOut('fast');
